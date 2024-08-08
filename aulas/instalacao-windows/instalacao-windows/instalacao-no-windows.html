@@ -1,0 +1,114 @@
+<div style="width:50%; margin:auto; font-size:24px;">
+<h1 id="instala-o-no-windows">Instalação no Windows</h1>
+<ol>
+   <li>
+      <ul>
+         <li>Faça download do Visual Studio no site(Versão community):
+            <a href="https://visualstudio.microsoft.com/pt-br/">https://visualstudio.microsoft.com/pt-br/</a> e escolha a opção [Desktop
+            develompment with C++].
+         </li>
+      </ul>
+   </li>
+   <li>
+      <ul>
+         <li>Faça o download do OpenCV: <a href="https://github.com/opencv/opencv">https://github.com/opencv/opencv</a> em releases
+            baixe o <code>.exe</code> :
+            <a href="https://github.com/opencv/opencv/releases/download/4.5.3/opencv-4.5.3-vc14_vc15.exe">https://github.com/opencv/opencv/releases/download/4.5.3/opencv-4.5.3-vc14_vc15.exe</a>
+            e (Instale o 7zip e escolha a pasta C:/ ) dê um duplo clique e esoclha o local de instalação(Recomendação: C:).
+            e clique em [Extract].
+         </li>
+      </ul>
+   </li>
+   <li>
+      <ul>
+         <li>Verificar a localização da pasta bin do opencv, exemplo(vá até ela e dê Ctrl + L
+            para poder copiar o caminho): 
+         </li>
+      </ul>
+   </li>
+</ol>
+<p>C:\opencv\build\x64\v15\bin</p>
+<p>E adicionar à variável Path do Windows(No menu iniciar digite: variáveis de
+   ambiente e abra em seguida ao encontrar, adicione)
+</p>
+<ol>
+   <li>
+      <ul>
+         <li>Reinicie o computador</li>
+      </ul>
+   </li>
+   <li>
+      <ul>
+         <li>No Visual Studio CRIE UM NOVO PROJETO → Projeto Vazio(mude o nome para
+            OpenCVcurso) → CREATE . Mude para x64!
+         </li>
+      </ul>
+   </li>
+   <li>
+      <ul>
+         <li>
+            <p>Vá em Projeto → Propriedades → Diretórios VC++:</p>
+         </li>
+         <li>
+            <ol>
+               <li>[Diretório de Inclusão] C:\opencv\build\include</li>
+            </ol>
+         </li>
+         <li>
+            <ol>
+               <li>[Diretórios de Biblioteca] C:\opencv\build\x64\vc15\lib</li>
+            </ol>
+         </li>
+      </ul>
+   </li>
+</ol>
+<p>[Aplicar][Ok]</p>
+<ol>
+   <li>De novo em: Projeto → Propriedades </li>
+</ol>
+<p>E em Vinculador → Entrada → Dependências Adicionais
+   (opencv_world450d.lib)
+</p>
+<p>C:\opencv\build\x64\vc15\lib\opencv_world450d.lib</p>
+<p>[Ok][Aplicar][Ok]</p>
+<ol>
+   <li>
+      <ul>
+         <li>Crie um arquivo de teste do OpenCV e Compile: </li>
+      </ul>
+   </li>
+</ol>
+<p>Clicar com o botão direito do mouse sobre a pasta do projeto → Adicionar →
+   Novo Item → (Nome Desejado do Arquivo.cpp)
+</p>
+<pre><code class="lang-cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;opencv2/imgcodecs.hpp&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;opencv2/highgui.hpp&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;opencv2/imgproc.hpp&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span>
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span>** argv)</span> </span>{
+    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">string</span> caminho = <span class="hljs-string">"arquivos/minha-foto.png"</span>;
+    cv::Mat imagem = cv::imread(caminho);
+    cv::imshow(<span class="hljs-string">"Imagem"</span>, imagem);
+    cv::waitKey(<span class="hljs-number">0</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre>
+<p>Clique com o botão direito do mouse sobre o projeto no Visual Studio e depois em Abrir diretório
+   com gerenciador de arquivos.
+   Crie uma pasta de nome [arquivos] e cole sua imagem(PNG) ou [essa] com o nome minha-foto.
+</p>
+<p>Agora você precisa clicar em: [Depurador Local do Windows] vai dar erro, mas vai criar o diretório [Debug]</p>
+<p>Agora você precisa COPIAR a DLL(opencv_world450d.dll) do caminho: C:\opencv\build\x64\vc15\bin
+   para: C:\Users\Familia\Documents\OpenCVcurso\x64\Debug\
+</p>
+<p>Agora novamente clique em [Depurador Local do Windows]. Se abrir uma janela com a imagem é porque está tudo certo, senão, verifique os
+   passos .
+</p>
+<p>Depois clique em [Continuar] para voltar a aparecer [Depurador Local do Windows].</p>
+<p>Os próximos passos serão iguais ao Linux. Para criar arquivos para Programação Orientada à Objetos use 
+   outros tipos de arquivos(cabeçalho e source) quando for [Adicionar][Novo item] . Isso está dentro do escopo 
+   do uso do Visual Studio e não do OpenCV .
+</p>
+<hr>
+</div>
