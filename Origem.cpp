@@ -3,47 +3,112 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/core.hpp>
 #include <opencv2/videoio.hpp>
+#include <opencv2/objdetect.hpp>
 #include <iostream>
 
 using namespace std;
 using namespace cv;
 
 //----------------------------------------------------------------------------------------------
+//aula 10 - detecção de placas
 
-//aula 7 - detecção de cores
 int main(int argc, char** argv) {
-  int matiz_min = 18, matiz_max = 34, saturacao_min = 190,
-      saturacao_max = 255, brilho_min = 21, brilho_max = 255;
-  std::string caminho = "./linux.png";
-  cv::Mat imagem = cv::imread(caminho), img_hsv, img_mask;
+  VideoCapture cap(0);
+  cv::Mat imagem;
 
-  cvtColor(imagem, img_hsv, COLOR_BGR2HSV);
+  CascadeClassifier placasCascade;
+  placasCascade.load("./haarcascade_russian_plate_number.xml");
 
-  namedWindow("Barra de seleção");
+  if (placasCascade.empty()) {
+    std::cerr << "Não foi possível ler o XML.";
+    return 1;
+  }
 
-  createTrackbar("Matiz mínima", "Barra de seleção", &matiz_min, 255);
-  createTrackbar("Matiz Máxima", "Barra de seleção", &matiz_max, 255);
-
-  createTrackbar("Saturação mínima", "Barra de seleção", &saturacao_min, 255);
-  createTrackbar("Saturação máxima", "Barra de seleção", &saturacao_max, 255);
-
-  createTrackbar("Brilho mínima", "Barra de seleção", &brilho_min, 255);
-  createTrackbar("Brilho máxima", "Barra de seleção", &brilho_max, 255);
+  std::vector<Rect> placas;
+  
 
   while (true) {
-    Scalar min(matiz_min, saturacao_min, brilho_min);
-    Scalar max(matiz_max, saturacao_max, brilho_max);
+    cap.read(imagem);
 
-    inRange(img_hsv, min, max, img_mask);
+    placasCascade.detectMultiScale(imagem, placas);
 
-    imshow("Imagem Original", imagem);
-    //cv::imshow("Imagem HSV", img_hsv);
-    imshow("Imagem Binaria", img_mask);
-    waitKey(1);
+    for (int i = 0; i < placas.size(); ++i) {
+      rectangle(imagem, placas[i].tl(), placas[i].br(), Scalar(255, 0, 0), 4);
+
+      Mat imagemCortada = imagem(placas[i]);
+      //imshow(std::to_string(i), imagemCortada); - captura imagem
+      imwrite("./" + std::to_string(i) + "-placa-detectada.png", imagemCortada); // salva imagem
+    }
+
+    cv::imshow("Detectar placas", imagem);
+    cv::waitKey(1);
   }
   
   return 0;
 }
+//----------------------------------------------------------------------------------------------
+
+////aula 9 - detecção de faces
+//
+//int main(int argc, char** argv) {
+//    std::string caminho = "./turma.jpg";
+//    cv::Mat imagem = cv::imread(caminho);
+//
+//    CascadeClassifier faceCascade;
+//    faceCascade.load("./haarcascade_frontalface_default.xml");
+//
+//    if (faceCascade.empty()) {
+//      std::cerr << "Não foi possível ler o XML.";
+//      return 1;
+//    }
+//
+//    std::vector<Rect> faces;
+//    faceCascade.detectMultiScale(imagem, faces);
+//
+//    for (int i = 0; i < faces.size(); ++i) {
+//      rectangle(imagem, faces[i].tl(), faces[i].br(), Scalar(255, 0, 0), 4);
+//    }
+//
+//    cv::imshow("Detectar rosto", imagem);
+//    cv::waitKey(0);
+//    return 0;
+//  }
+////----------------------------------------------------------------------------------------------
+
+//aula 7 - detecção de cores
+//int main(int argc, char** argv) {
+//  int matiz_min = 18, matiz_max = 34, saturacao_min = 190,
+//      saturacao_max = 255, brilho_min = 21, brilho_max = 255;
+//  std::string caminho = "./linux.png";
+//  cv::Mat imagem = cv::imread(caminho), img_hsv, img_mask;
+//
+//  cvtColor(imagem, img_hsv, COLOR_BGR2HSV);
+//
+//  namedWindow("Barra de seleção");
+//
+//  createTrackbar("Matiz mínima", "Barra de seleção", &matiz_min, 255);
+//  createTrackbar("Matiz Máxima", "Barra de seleção", &matiz_max, 255);
+//
+//  createTrackbar("Saturação mínima", "Barra de seleção", &saturacao_min, 255);
+//  createTrackbar("Saturação máxima", "Barra de seleção", &saturacao_max, 255);
+//
+//  createTrackbar("Brilho mínima", "Barra de seleção", &brilho_min, 255);
+//  createTrackbar("Brilho máxima", "Barra de seleção", &brilho_max, 255);
+//
+//  while (true) {
+//    Scalar min(matiz_min, saturacao_min, brilho_min);
+//    Scalar max(matiz_max, saturacao_max, brilho_max);
+//
+//    inRange(img_hsv, min, max, img_mask);
+//
+//    imshow("Imagem Original", imagem);
+//    //cv::imshow("Imagem HSV", img_hsv);
+//    imshow("Imagem Binaria", img_mask);
+//    waitKey(1);
+//  }
+//  
+//  return 0;
+//}
 
 //----------------------------------------------------------------------------------------------
 //aula 6 - perspectiva
